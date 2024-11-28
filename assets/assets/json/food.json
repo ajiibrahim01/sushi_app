@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Maki Sushi",
+    "description": "Traditional rolled sushi with a variety of fillings wrapped in seaweed and rice.",
+    "price": "8.5",
+    "image_path": "assets/images/sushi_maki.jpg",
+    "rating": "4.5"
+  },
+  {
+    "name": "Nigiri Sushi",
+    "description": "Hand-pressed sushi rice topped with a slice of fresh fish or seafood.",
+    "price": "10.0",
+    "image_path": "assets/images/sushi_nigiri.jpg",
+    "rating": "4.7"
+  },
+  {
+    "name": "Inarizushi",
+    "description": "Sweet and savory sushi rice stuffed in a fried tofu pouch.",
+    "price": "5.0",
+    "image_path": "assets/images/sushi_inarizushi.jpg",
+    "rating": "4.2"
+  },
+  {
+    "name": "Gunkan Maki",
+    "description": "Battleship-style sushi with seaweed wrapped around rice and topped with various ingredients.",
+    "price": "9.0",
+    "image_path": "assets/images/sushi_gunkan.jpg",
+    "rating": "4.4"
+  },
+  {
+    "name": "Chirashi Sushi",
+    "description": "A bowl of sushi rice topped with a variety of sashimi and garnishes.",
+    "price": "12.0",
+    "image_path": "assets/images/sushi_chirashi.jpg",
+    "rating": "4.8"
+  }
+]
