@@ -18,4 +18,14 @@ class Cart extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+  void clearCart() {
+    _cart.clear();
+    notifyListeners();
+  }
+
+  void removeFromCart(CartModel item) {
+    _cart.remove(item);
+    notifyListeners();
+  }
 }

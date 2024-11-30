@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sushi_app/models/food.dart';
 import 'package:sushi_app/provider/cart.dart';
+import 'package:sushi_app/screens/cart_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   final Food food;
@@ -68,7 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Food was added to cart', // The message shown in the bottom sheet
                 style: TextStyle(
@@ -76,10 +77,70 @@ class _DetailScreenState extends State<DetailScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(height: 30),
+              Text(
+                '${widget.food.name} was added to cart, would you like to add some food?', // The message shown in the bottom sheet
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    child: FloatingActionButton(
+                      heroTag: 'goToCart',
+                      backgroundColor: Color.fromARGB(109, 140, 94, 91),
+                      elevation: 0,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        goToCart();
+                      },
+                      child: Text(
+                        'View cart',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: FloatingActionButton(
+                      heroTag: 'pop',
+                      backgroundColor: Theme.of(context).primaryColor,
+                      elevation: 0,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Sure',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         );
       },
+    );
+  }
+
+  goToCart() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CartScreen(),
+      ),
     );
   }
 
@@ -103,17 +164,26 @@ class _DetailScreenState extends State<DetailScreen> {
                       CupertinoIcons.bag,
                       size: 30,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      goToCart();
+                    },
                   ),
-                  CircleAvatar(
-                    radius: 10,
-                    backgroundColor: Colors.yellow,
-                    child: Center(
-                      child: Text(
-                        value.cart.length.toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
+                  Positioned(
+                    top: 14,
+                    left: 14,
+                    child: Visibility(
+                      visible: value.cart.isNotEmpty ? true : false,
+                      child: CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Colors.transparent,
+                        child: Center(
+                          child: Text(
+                            value.cart.length.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
                     ),

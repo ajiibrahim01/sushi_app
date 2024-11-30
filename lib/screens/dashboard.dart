@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sushi_app/models/food.dart';
+import 'package:sushi_app/provider/cart.dart';
+import 'package:sushi_app/screens/cart_screen.dart';
 import 'package:sushi_app/screens/detail_screen.dart';
 
 class Dashboard extends StatefulWidget {
@@ -93,34 +96,45 @@ class _DashboardState extends State<Dashboard> {
               size: 30,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    CupertinoIcons.bag,
-                    size: 30,
-                  ),
-                ),
-                Visibility(
-                  visible: false,
-                  child: Positioned(
-                    top: 12,
-                    right: 14,
-                    child: CircleAvatar(
-                      radius: 9,
-                      backgroundColor: Colors.red,
-                      child: Text(
-                        '10',
-                        style: TextStyle(color: Colors.white, fontSize: 10),
+          Consumer<Cart>(
+            builder: (context, value, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        CupertinoIcons.bag,
+                        size: 30,
                       ),
+                      onPressed: () {
+                        goToCart();
+                      },
                     ),
-                  ),
-                )
-              ],
-            ),
+                    Positioned(
+                      top: 14,
+                      left: 14,
+                      child: Visibility(
+                        visible: value.cart.isNotEmpty ? true : false,
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: Colors.transparent,
+                          child: Center(
+                            child: Text(
+                              value.cart.length.toString(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -224,6 +238,15 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  goToCart() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CartScreen(),
       ),
     );
   }
