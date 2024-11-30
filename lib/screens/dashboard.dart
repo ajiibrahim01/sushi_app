@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sushi_app/models/food.dart';
+import 'package:sushi_app/screens/detail_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,19 +19,36 @@ class _DashboardState extends State<Dashboard> {
   Future<void> getFoods() async {
     String jsonString =
         await rootBundle.loadString('assets/assets/json/food.json');
+
     List<dynamic> jsonMap = json.decode(jsonString);
 
     setState(() {
       foods = jsonMap.map((e) => Food.fromJson(e)).toList();
     });
 
-    debugPrint(foods[0].name);
+    if (foods.isNotEmpty) {
+      debugPrint(foods[0].name); // Safely print the name of the first food
+    } else {
+      debugPrint('No foods available in the JSON');
+    }
+  }
+
+  void detailFood(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailScreen(
+          food: foods[index],
+        ),
+      ),
+    );
   }
 
   @override
   void initState() {
-    getFoods(); // TODO: implement initState
+    // TODO: implement initState
     super.initState();
+    getFoods();
   }
 
   @override
@@ -68,6 +86,13 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.search,
+              size: 30,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
@@ -99,25 +124,139 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
       ),
-      body: Column(children: [
-        // banner
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // banner
+          BannerPromoWidget(),
+
+          // best seller
+          SizedBox(height: 20),
+
+          BestSellerWidget(context),
+          SizedBox(height: 20),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Popular Food',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemCount: foods.length,
+              padding: const EdgeInsets.all(10),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    detailFood(index);
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.only(right: 16),
+                    height: 140,
+                    width: 140,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Hero(
+                          tag: foods[index].imagePath.toString(),
+                          child: Container(
+                            height: 100,
+                            width: 140,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      foods[index].imagePath.toString()),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.2),
+                                      BlendMode.darken)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          foods[index].name.toString(),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          foods[index].price.toString() + ' IDR',
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 85, 17, 12),
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Icon(CupertinoIcons.star_fill,
+                                size: 12,
+                                color: const Color.fromARGB(255, 104, 94, 3)),
+                            SizedBox(width: 5),
+                            Text(
+                              foods[index].rating.toString(),
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 104, 94, 2),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column BestSellerWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Best Seller',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Container(
-          height: 200,
+          height: 120,
           margin: EdgeInsets.all(10),
           width: MediaQuery.sizeOf(context).width,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/assets/images/sushi_nigiri.jpg'),
+                image: AssetImage(foods[2].imagePath.toString()),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.3), BlendMode.darken)),
+                    Colors.black.withOpacity(0.2), BlendMode.darken)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ListTile(
                 title: Text(
-                  'Get 78% off ',
+                  foods[2].name.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 34,
@@ -125,21 +264,65 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 subtitle: Text(
-                  'for Sushi Nigiri',
+                  '${foods[2].price} IDR',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                   ),
                 ),
-                trailing: Icon(
-                  CupertinoIcons.arrow_right,
-                  color: Colors.white,
-                ),
               )
             ],
           ),
-        )
-      ]),
+        ),
+      ],
+    );
+  }
+}
+
+class BannerPromoWidget extends StatelessWidget {
+  const BannerPromoWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      margin: EdgeInsets.all(10),
+      width: MediaQuery.sizeOf(context).width,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/assets/images/sushi_nigiri.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3), BlendMode.darken)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ListTile(
+            title: Text(
+              'Get 78% off ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(
+              'for Sushi Nigiri',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            trailing: Icon(
+              CupertinoIcons.arrow_right,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
