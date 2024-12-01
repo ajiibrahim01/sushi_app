@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sushi_app/provider/cart.dart';
 import 'package:sushi_app/screens/dashboard.dart';
+import 'package:sushi_app/screens/payment_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -16,7 +17,7 @@ class _CartScreenState extends State<CartScreen> {
   bool loader = true;
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2)).then((value) {
+    Future.delayed(Duration(seconds: 1)).then((value) {
       setState(() {
         loader = false;
       });
@@ -218,7 +219,14 @@ class _CartScreenState extends State<CartScreen> {
                                     Icon(CupertinoIcons.arrow_right),
                                   ],
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PaymentScreen(
+                                              totalPayment:
+                                                  totalPayment.toString())));
+                                },
                               ),
                             )
                           ],

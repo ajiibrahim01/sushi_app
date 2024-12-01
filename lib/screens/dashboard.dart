@@ -29,12 +29,6 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       foods = jsonMap.map((e) => Food.fromJson(e)).toList();
     });
-
-    if (foods.isNotEmpty) {
-      debugPrint(foods[0].name); // Safely print the name of the first food
-    } else {
-      debugPrint('No foods available in the JSON');
-    }
   }
 
   void detailFood(int index) {
