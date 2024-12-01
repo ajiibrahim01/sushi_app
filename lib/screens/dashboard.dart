@@ -8,6 +8,7 @@ import 'package:sushi_app/models/food.dart';
 import 'package:sushi_app/provider/cart.dart';
 import 'package:sushi_app/screens/cart_screen.dart';
 import 'package:sushi_app/screens/detail_screen.dart';
+import 'package:sushi_app/screens/search_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -90,7 +91,10 @@ class _DashboardState extends State<Dashboard> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchScreen()));
+            },
             icon: Icon(
               CupertinoIcons.search,
               size: 30,

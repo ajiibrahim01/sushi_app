@@ -198,40 +198,42 @@ class _DetailScreenState extends State<DetailScreen> {
       body: DetailBody(context),
 
       //Bottom
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          addToCart();
-        },
-        child: Container(
-          margin: const EdgeInsets.all(8.0),
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: Colors.redAccent,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Add to Cart',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
+      bottomNavigationBar: qtyCount == 0
+          ? null
+          : GestureDetector(
+              onTap: () {
+                addToCart();
+              },
+              child: Container(
+                margin: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.redAccent,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Add to Cart',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      'Rp. ' + totalPrice.toString(),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                'Rp. ' + totalPrice.toString(),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
       //bottom nav
     );
   }

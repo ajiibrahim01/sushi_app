@@ -8,14 +8,27 @@ class Cart extends ChangeNotifier {
   List<CartModel> get cart => _cart;
 
   void addToCart(Food foodItem, int qty) {
-    _cart.add(
-      CartModel(
-        name: foodItem.name,
-        price: foodItem.price,
-        imagePath: foodItem.imagePath,
-        quantity: qty.toString(),
-      ),
-    );
+    bool isExist = false;
+
+    for (var cartItem in _cart) {
+      if (cartItem.name == foodItem.name) {
+        cartItem.quantity =
+            (int.parse(cartItem.quantity.toString()) + qty).toString();
+        isExist = true;
+        break;
+      }
+    }
+    if (!isExist) {
+      _cart.add(
+        CartModel(
+          name: foodItem.name,
+          price: foodItem.price,
+          imagePath: foodItem.imagePath,
+          quantity: qty.toString(),
+        ),
+      );
+    }
+
     notifyListeners();
   }
 
@@ -25,7 +38,18 @@ class Cart extends ChangeNotifier {
   }
 
   void removeFromCart(CartModel item) {
-    _cart.remove(item);
+    for (var cartItem in _cart) {
+      if (cartItem.name == item.name) {
+        if (int.parse(cartItem.quantity.toString()) > 1) {
+          cartItem.quantity =
+              (int.parse(cartItem.quantity.toString()) - 1).toString();
+        } else {
+          _cart.remove(cartItem);
+          break;
+        }
+        break;
+      }
+    }
     notifyListeners();
   }
 }
